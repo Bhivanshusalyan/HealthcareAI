@@ -258,7 +258,7 @@ const Home = () => {
                     className="gap-2 border-0 px-8 text-base glow-primary gradient-bg-primary text-primary-foreground"
                     onClick={() => navigate("/login")}
                   >
-                    Patient Login <ArrowRight className="h-4 w-4" />
+                    Login <ArrowRight className="h-4 w-4" />
                   </Button>
                   <Button
                     size="lg"
@@ -266,7 +266,7 @@ const Home = () => {
                     className="gap-2 px-8 text-base"
                     onClick={() => navigate("/doctor/login")}
                   >
-                    Doctor Login
+                    Get Started
                   </Button>
                 </div>
 
@@ -551,7 +551,7 @@ const Home = () => {
                     className="gap-2 bg-background px-8 text-base text-foreground hover:bg-background/90"
                     onClick={() => navigate("/login")}
                   >
-                    Open Patient Portal <ArrowRight className="h-4 w-4" />
+                    Login <ArrowRight className="h-4 w-4" />
                   </Button>
                   <Button
                     size="lg"
@@ -559,7 +559,7 @@ const Home = () => {
                     className="border-primary-foreground/30 px-8 text-base text-primary-foreground hover:bg-primary-foreground/10"
                     onClick={() => navigate("/doctor/login")}
                   >
-                    Doctor Console
+                    Get Started
                   </Button>
                 </div>
               </div>

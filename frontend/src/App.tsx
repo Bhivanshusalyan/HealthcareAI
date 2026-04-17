@@ -7,7 +7,7 @@ import Register from "./pages/Register";
 import UserHome from "./pages/UserHome";
 import Dashboard from "./pages/Dashboard";
 import Health from "./pages/Health";
-import Food from "./pages/Food";
+// import Food from "./pages/Food";
 import Aqi from "./pages/Aqi";
 import Analysis from "./pages/Analysis";
 import Community from "./pages/Community";
@@ -37,7 +37,7 @@ const AnimatedRoutes = () => {
   const location = useLocation();
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <AnimatePresence mode="sync" initial={false}>
       <Routes location={location} key={location.pathname}>
         <Route
           path="/"
@@ -117,7 +117,7 @@ const AnimatedRoutes = () => {
             </ProtectedRoute>
           }
         />
-        <Route
+        {/* <Route
           path="/food"
           element={
             <ProtectedRoute>
@@ -126,7 +126,7 @@ const AnimatedRoutes = () => {
               </PageTransition>
             </ProtectedRoute>
           }
-        />
+        /> */}
         <Route
           path="/aqi"
           element={

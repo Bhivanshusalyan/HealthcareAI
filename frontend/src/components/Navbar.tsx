@@ -59,13 +59,13 @@ const Navbar = ({ onSectionClick }: NavbarProps) => {
         <div className="hidden items-center gap-3 md:flex">
           <ThemeToggle compact className="h-10 w-10 rounded-xl" />
           <Button variant="ghost" className="h-10 rounded-xl px-3.5 text-sm" onClick={() => navigate("/login")}>
-            Patient Login
+            Login
           </Button>
           <Button
             className="h-10 rounded-xl border-0 px-3.5 text-sm gradient-bg-primary text-primary-foreground"
             onClick={() => navigate("/doctor/login")}
           >
-            Doctor Login
+            Get Started
           </Button>
         </div>
 
@@ -112,7 +112,7 @@ const Navbar = ({ onSectionClick }: NavbarProps) => {
                     navigate("/login");
                   }}
                 >
-                  Patient Login
+                  Login
                 </Button>
                 <Button
                   className="h-10 flex-1 rounded-xl border-0 text-sm gradient-bg-primary text-primary-foreground"
@@ -121,7 +121,7 @@ const Navbar = ({ onSectionClick }: NavbarProps) => {
                     navigate("/doctor/login");
                   }}
                 >
-                  Doctor Login
+                  Get Started
                 </Button>
               </div>
             </div>
