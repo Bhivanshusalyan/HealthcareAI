@@ -27,6 +27,12 @@ from app.schemas.auth import LoginRequest, RegisterRequest, TokenResponse, Updat
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 ExportScope = Literal["complete", "weekly", "this_month"]
 
+DEMO_USER_EMAIL = "user@gmail.com"
+DEMO_USER_PASSWORD = "123456"
+DEMO_USER_NAME = "Demo User"
+DEMO_USER_PHONE = "9000000002"
+DEMO_USER_AGE = 25
+
 DEMO_HOSPITAL_EMAIL = "hospital@gmail.com"
 DEMO_HOSPITAL_PASSWORD = "123456"
 DEMO_HOSPITAL_NAME = "Hospital Administration"
@@ -76,19 +82,30 @@ def create_user(db: Session, payload: RegisterRequest) -> User:
     return user
 
 
-def ensure_demo_hospital_account(db: Session) -> User:
-    existing_user = _get_user_by_email(db, DEMO_HOSPITAL_EMAIL)
+def _ensure_demo_account(
+    db: Session,
+    *,
+    email: str,
+    password: str,
+    full_name: str,
+    phone: str,
+    age: int,
+    gender: str | None = None,
+) -> User:
+    existing_user = _get_user_by_email(db, email)
     if existing_user:
-        existing_user.full_name = DEMO_HOSPITAL_NAME
+        existing_user.full_name = full_name
         existing_user.is_active = True
-        existing_user.hashed_password = hash_password(DEMO_HOSPITAL_PASSWORD)
+        existing_user.hashed_password = hash_password(password)
         if not existing_user.phone:
-            fallback_phone = DEMO_HOSPITAL_PHONE
+            fallback_phone = phone
             if _get_user_by_phone(db, fallback_phone):
                 fallback_phone = _generate_placeholder_phone(db)
             existing_user.phone = fallback_phone
         if existing_user.age < 18:
-            existing_user.age = DEMO_HOSPITAL_AGE
+            existing_user.age = age
+        if gender is not None:
+            existing_user.gender = gender
 
         if existing_user.profile is None:
             db.add(UserProfile(user_id=existing_user.id, activity_level="moderate"))
@@ -100,26 +117,50 @@ def ensure_demo_hospital_account(db: Session) -> User:
         db.refresh(existing_user)
         return existing_user
 
-    hospital_phone = DEMO_HOSPITAL_PHONE
-    if _get_user_by_phone(db, hospital_phone):
-        hospital_phone = _generate_placeholder_phone(db)
+    resolved_phone = phone
+    if _get_user_by_phone(db, resolved_phone):
+        resolved_phone = _generate_placeholder_phone(db)
 
-    hospital_user = User(
-        full_name=DEMO_HOSPITAL_NAME,
-        phone=hospital_phone,
-        email=DEMO_HOSPITAL_EMAIL,
-        age=DEMO_HOSPITAL_AGE,
-        gender="N/A",
-        hashed_password=hash_password(DEMO_HOSPITAL_PASSWORD),
+    demo_user = User(
+        full_name=full_name,
+        phone=resolved_phone,
+        email=email,
+        age=age,
+        gender=gender,
+        hashed_password=hash_password(password),
     )
-    db.add(hospital_user)
+    db.add(demo_user)
     db.flush()
 
-    db.add(UserProfile(user_id=hospital_user.id, activity_level="moderate"))
-    db.add(UserSettings(user_id=hospital_user.id))
+    db.add(UserProfile(user_id=demo_user.id, activity_level="moderate"))
+    db.add(UserSettings(user_id=demo_user.id))
     db.commit()
-    db.refresh(hospital_user)
-    return hospital_user
+    db.refresh(demo_user)
+    return demo_user
+
+
+def ensure_demo_user_account(db: Session) -> User:
+    return _ensure_demo_account(
+        db,
+        email=DEMO_USER_EMAIL,
+        password=DEMO_USER_PASSWORD,
+        full_name=DEMO_USER_NAME,
+        phone=DEMO_USER_PHONE,
+        age=DEMO_USER_AGE,
+        gender="N/A",
+    )
+
+
+def ensure_demo_hospital_account(db: Session) -> User:
+    return _ensure_demo_account(
+        db,
+        email=DEMO_HOSPITAL_EMAIL,
+        password=DEMO_HOSPITAL_PASSWORD,
+        full_name=DEMO_HOSPITAL_NAME,
+        phone=DEMO_HOSPITAL_PHONE,
+        age=DEMO_HOSPITAL_AGE,
+        gender="N/A",
+    )
 
 
 def _issue_token_pair(db: Session, user: User, user_agent: str | None = None, ip_address: str | None = None) -> TokenResponse:

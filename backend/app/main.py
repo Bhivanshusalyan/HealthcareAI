@@ -8,7 +8,7 @@ from app.db.session import init_db
 from app.services.plan_service import ensure_default_plans
 from app.db.session import CoreSessionLocal
 from app.services.health_service import warmup_health_models
-from app.services.auth_service import ensure_demo_hospital_account
+from app.services.auth_service import ensure_demo_hospital_account, ensure_demo_user_account
 
 app = FastAPI(title=settings.app_name, version=settings.app_version)
 
@@ -28,6 +28,7 @@ def startup_event() -> None:
     db = CoreSessionLocal()
     try:
         ensure_default_plans(db)
+        ensure_demo_user_account(db)
         ensure_demo_hospital_account(db)
     finally:
         db.close()

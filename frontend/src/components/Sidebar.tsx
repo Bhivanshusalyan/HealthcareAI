@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils";
 const patientLinks = [
   { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
   { label: "Health", to: "/health", icon: HeartPulse },
-  { label: "Food", to: "/food", icon: Leaf },
+  // { label: "Food", to: "/food", icon: Leaf },
   { label: "AQI", to: "/aqi", icon: AirVent },
   { label: "Analysis", to: "/analysis", icon: Brain },
   { label: "Community", to: "/community", icon: Users },
